@@ -10,6 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+/******************************************************************************
+                            *** Main Activity ***
+ *   This class shows the side panel that allows you to switch to the
+ *   other fragments.  It is the main activity because it is kind of
+ *   like the "backbone" of the app.
+ *******************************************************************************/
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;

@@ -11,6 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+/************************************************************************************
+    *** Adding a Semester ***
+
+    This class is used to allow the user to create a semester that can hold up to
+    five courses - all of which is saved into a database and used throughout the
+    app to create events, display events, view previous semesters etc.
+ *************************************************************************************/
 public class AddSemesterFragment extends Fragment {
     DatabaseHelper myDB;
     @Nullable
@@ -18,6 +25,7 @@ public class AddSemesterFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_semester, container, false);
 
+        // initiating the EditText fields to save the values from the user input:
         myDB = DatabaseHelper.getInstance(getActivity());
         final DatabaseHelper myDB = new DatabaseHelper(getActivity());
         final EditText et_semester_name = v.findViewById(R.id.et_semester_name);
@@ -28,17 +36,21 @@ public class AddSemesterFragment extends Fragment {
         final EditText et_fifth_class   = v.findViewById(R.id.et_fifth_class);
         Button btn_create_semester      = v.findViewById(R.id.btn_create_semester);
 
+        // What happens when the "create semester" button is clicked:
         btn_create_semester.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
             {
+                // This first part converts inputs to a string to be added to the database:
                 String name = et_semester_name.getText().toString();
                 String class_1 = et_class_one.getText().toString();
                 String class_2 = et_second_class.getText().toString();
                 String class_3 = et_third_class.getText().toString();
                 String class_4 = et_fourth_class.getText().toString();
                 String class_5 = et_fifth_class.getText().toString();
-                boolean isInserted = myDB.insertSemesterData(name, class_1, class_2, class_3, class_4, class_5);
+
+                // this checks to see if the information was added successfully or not:
+                boolean isInserted = myDB.insertSemesterData(name, class_1, class_2, class_3, class_4, class_5); // actually adding it to db.
                 if (isInserted == true)
                     Toast.makeText(AddSemesterFragment.this.getActivity(), "SEMESTER ADDED", Toast.LENGTH_LONG).show();
                 else

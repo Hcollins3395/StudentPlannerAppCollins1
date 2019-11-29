@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,6 +25,19 @@ import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
+/***************************************************************************************
+                             *** Create an Event ***
+ * This class was not what I was planning on using so the name is a messed up,
+ * however, this class is very important to the app.
+ *
+ * This class allows the user to select a class and an assignment type and packages
+ * that information with the date from the home fragment and adds all of it to the
+ * database.
+ *
+ * This is also where the app calls the notification method to send a notification
+ * to the phone whenever the timer is up.  To delay the notification, a Handler
+ * object was used.
+ ****************************************************************************************/
 public class sub2Activity extends AppCompatActivity  {
 
     // This is the actual class that comes off of the Home screen when they press the button
@@ -35,23 +47,26 @@ public class sub2Activity extends AppCompatActivity  {
 
     private NotificationCompat.Builder notification;
     DatabaseHelper db;
+    NotificationSettingsFragment NSF;
+    private Handler handler = new Handler();
+
     public String selectedAssignmentType;
     public String selectedClass;
-    Button btn_create_event;
-    TextView current_classes;
     public static final String PRIMARY_CHANNEL_ID = "Primary Notifications Channel";
-    public static final int uniqueID = 12345;
-    private Handler handler = new Handler();
     String selectedDate;
     String selectedDatePlusTime;
+    String currentSemester;
+
+    public static final int uniqueID = 12345;
+
+    Long cDateTIM;
+
+    Button btn_create_event;
+    TextView current_classes;
     TextView tv_date;
     Calendar cDate;
-    Long cDateTIM;
-    Long oneDayMil = longValue(8.64 * Math.pow(10, 7));         // homework
-    Long fiveDaysMil = longValue(4.32 * Math.pow(10, 8));       // quiz
-    Long nineDaysMil = longValue(7.776 * Math.pow(10, 8));      // test
-    Long twelveDaysMil = longValue(1.037 * Math.pow(10, 9));    // exam, paper, project
-    String currentSemester;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +77,7 @@ public class sub2Activity extends AppCompatActivity  {
 
         tv_date = findViewById(R.id.calendar_date);
 
+        // Getting value from the home fragment
         Intent incomingIntent = getIntent();
         selectedDate = incomingIntent.getStringExtra("date");
         tv_date.setText(selectedDate);
@@ -74,8 +90,9 @@ public class sub2Activity extends AppCompatActivity  {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        cDateTIM = cDate.getTimeInMillis();
-
+        cDateTIM = cDate.getTimeInMillis(); // Getting the date and converting it to milliseconds
+                                            // this is to help compare to the number of days we need to
+                                            // subtract for the notification delay.
         current_classes = findViewById(R.id.currentSemesterName);
         currentSemester = db.getCurrentSemesterName().toString();
         current_classes.setText(currentSemester);
@@ -94,8 +111,9 @@ public class sub2Activity extends AppCompatActivity  {
         getIntent().getExtras();
 
 
-        final Spinner currentClasses = findViewById(R.id.spinner_classes);
+
         //  Loading classes into class spinner:
+        final Spinner currentClasses = findViewById(R.id.spinner_classes);
         ArrayList<String> listClasses = db.getCurrentSemesterClasses();
         ArrayAdapter<String> semesterAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, listClasses);
         currentClasses.setAdapter(semesterAdapter1);
@@ -132,9 +150,9 @@ public class sub2Activity extends AppCompatActivity  {
             }
         });
 
+        // When this button is clicked, we want to add all values to database and create a notification:
         btn_create_event = findViewById(R.id.btn_create_event);
         btn_create_event.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
                 notification = new NotificationCompat.Builder(sub2Activity.this, PRIMARY_CHANNEL_ID);
@@ -156,13 +174,17 @@ public class sub2Activity extends AppCompatActivity  {
 
                 notification.setContentIntent(pendingIntent);
                 if(selectedAssignmentType == "Homework Assignment")
-                    handler.postDelayed(runnable, (cDateTIM - oneDayMil));
+                    handler.postDelayed(runnable, (cDateTIM - NSF.getHomeworkTime()));
                 else if(selectedAssignmentType == "Quiz")
-                    handler.postDelayed(runnable, (cDateTIM - fiveDaysMil));
+                    handler.postDelayed(runnable, (cDateTIM - NSF.getQuizTime()));
                 else if(selectedAssignmentType == "Test")
-                    handler.postDelayed(runnable, (cDateTIM - nineDaysMil));
-                else
-                    handler.postDelayed(runnable, (cDateTIM - twelveDaysMil));
+                    handler.postDelayed(runnable, (cDateTIM - NSF.getTestTime()));
+                else if(selectedAssignmentType == "Exam")
+                    handler.postDelayed(runnable, (cDateTIM - NSF.getExamTime()));
+                else if(selectedAssignmentType == "Project")
+                    handler.postDelayed(runnable, (cDateTIM - NSF.getProjectTime()));
+                else if(selectedAssignmentType == "Paper")
+                    handler.postDelayed(runnable, (cDateTIM - NSF.getPaperTime()));
             }
             private Runnable runnable = new Runnable() {
                 @Override
@@ -174,8 +196,5 @@ public class sub2Activity extends AppCompatActivity  {
         });
 
 
-    }
-    public long longValue( double value) {
-        return (long)value;
     }
 }

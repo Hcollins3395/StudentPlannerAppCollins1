@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.studentplanner">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,16 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:node="replace">
-
-        <receiver android:name="com.allyants.notifyme.NotificationPublisher" />
-        <receiver android:name="com.allyants.notifyme.BootNotifyMe">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.HOME" />
-            </intent-filter>
-        </receiver>
-
+        <activity android:name=".CalendarTest"></activity>
         <activity
             android:name=".sub2Activity"
             android:label="Create a New Activity"
@@ -43,15 +31,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ViewAssignments"
             android:label="View Assignments"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".PopUp"
+            android:theme="@style/AppTheme.CustomPopupWindow">
         </activity>
-
     </application>
 
 </manifest>

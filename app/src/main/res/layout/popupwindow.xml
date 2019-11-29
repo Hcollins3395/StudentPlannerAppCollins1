@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <TextView
+        android:id="@+id/tvPopupTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:layout_gravity="center"
+        android:textColor="#FFFF"
+        android:textSize="30dp"
+        android:padding="10dp"/>
+
+    <TableLayout
+        android:id="@+id/selectedDateTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:id="@+id/columnHeaders"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/classesOnDate"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:paddingRight="10dp"
+                android:textSize="20dp"
+                android:text="Classes"
+                android:textColor="#FFFF"/>
+
+            <TextView
+                android:id="@+id/assignmentTypesOnDate"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:paddingRight="10dp"
+                android:textSize="20dp"
+                android:text="Assignment Types"
+                android:textColor="#FFFF"/>
+        </TableRow>
+
+
+        <TableRow
+            android:id="@+id/columnInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/classNames"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:paddingRight="10dp"
+                android:textSize="17dp"
+                android:text="classes"
+                android:textColor="#FFFF"/>
+
+            <TextView
+                android:id="@+id/assignmentNames"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:paddingRight="10dp"
+                android:textSize="17dp"
+                android:text="assignment types"
+                android:textColor="#FFFF"/>
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:id="@+id/goToCreateEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Create New Event" />
+
+
+
+</LinearLayout>

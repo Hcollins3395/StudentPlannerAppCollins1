@@ -13,6 +13,13 @@ import java.util.ArrayList;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+/*************************************************************************************************
+                                ***  View Assignments  ***
+ * This class shows all of the events that were created in the sub2Activity class.
+ *
+ * There are three TextViews used to accomplish this: one for the date, one for the
+ * class, and one for the type of the assignment.
+ *************************************************************************************************/
 public class ViewAssignments extends AppCompatActivity {
 DatabaseHelper db;
 TableLayout tableLayout;

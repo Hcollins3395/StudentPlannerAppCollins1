@@ -14,6 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+/****************************************************************************************
+                                 ***  Previous Semesters ***
+ * This class displays the classes of whatever semester the user chooses from a
+ * spinner.
+ *
+ * There is a spinner that calls the database class to get all of the semester
+ * names and, depending on what is chosen, the courses are then displayed in a
+ * TextView.
+ ****************************************************************************************/
+
 public class PrevSemesterFragment extends Fragment {
     DatabaseHelper myDB;
     TextView tvClass1;
@@ -30,6 +40,7 @@ public class PrevSemesterFragment extends Fragment {
         // Initialize Database:
         myDB = DatabaseHelper.getInstance(getActivity());
         final DatabaseHelper myDB = new DatabaseHelper(getActivity());
+
         tvClass1 = v.findViewById(R.id.tvClass1);
         tvClass2 = v.findViewById(R.id.tvClass2);
         tvClass3 = v.findViewById(R.id.tvClass3);
