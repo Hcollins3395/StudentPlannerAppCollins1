@@ -5,12 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 /*****************************************************************************
@@ -20,21 +19,26 @@ import androidx.appcompat.app.AppCompatActivity;
  ******************************************************************************/
 public class PopUp extends AppCompatActivity {
     DatabaseHelper db;
-    CustomCalendarView capture;
-    String selectedDate;
+    String selectedDate = " ";
     TextView classes;
     TextView tvTitle;
     TextView assignmentTypes;
     String classesOnDate = " ";
     String assignmentsOnDate = " ";
-    String capturedDate = capture.getTheSelectedDate();
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         setContentView(R.layout.popupwindow);
 
+        Intent incomingIntent = getIntent();
+        selectedDate = incomingIntent.getStringExtra("date");
+
+
+        // Intent incomingIntent = getIntent();
+        // selectedDate = incomingIntent.getStringExtra("homeScreenDate");
         db = DatabaseHelper.getInstance(this);
         tvTitle = findViewById(R.id.tvPopupTitle);
         classes = findViewById(R.id.classNames);
@@ -48,9 +52,9 @@ public class PopUp extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width  = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int)(width*.85), (int)(height*.25));
+        getWindow().setLayout((int)(width*.85), (int)(height*.50));
 
-        tvTitle.setText(capturedDate);
+        tvTitle.setText(selectedDate);
 
 
         for(int i = 0; i < db.getClassesOnDate(selectedDate).size(); i++)
@@ -86,8 +90,7 @@ public class PopUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent in  = new Intent(PopUp.this, sub2Activity.class);
-                in.putExtra("date", capturedDate);
-
+                in.putExtra("date", selectedDate);
                 startActivity(in);
             }
         });

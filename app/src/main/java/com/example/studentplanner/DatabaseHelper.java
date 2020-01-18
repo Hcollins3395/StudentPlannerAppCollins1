@@ -39,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public static final String DATABASE_NAME = "StudentPlannerApp.db";
+    public static final String DATABASE_NAME = "StudentPlannerApplication1.db";
 
     // The Semester Table:
     public static final String SEMESTER_TABLE = "sem_table";
@@ -59,14 +59,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ASSIGNMENT_TYPE = "assignment_type";
     public static final String DATE_OF_EVENT = "date_of_event";
 
+    // The Notification Table:
+    public static final String NOTIFICATION_TABLE = "notification_table";
+    public static final String ASSIGNMENT_TYPE_NAME = "assignment_type";
+    public static final String DAY_VALUE = "day_value";
+
+
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 3);
+        super(context, DATABASE_NAME, null, 4);
         SQLiteDatabase db = this.getWritableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // The next two calls create the two tables with the values specified above:
+        // The next two calls create the three tables with the values specified above:
         db.execSQL("CREATE TABLE " + SEMESTER_TABLE +
                 " (sem_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, sem_name TEXT NOT NULL, " +
                 "class_1 TEXT, class_2 TEXT, class_3 TEXT, class_4 TEXT, class_5 TEXT)");
@@ -75,13 +81,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + DATE_OF_EVENT + " DATE, " + SEMESTER_OF_EVENT +
                 " TEXT, " + CLASS_OF_EVENT + " TEXT, " + ASSIGNMENT_TYPE + " TEXT)");
 
+        db.execSQL("CREATE TABLE " + NOTIFICATION_TABLE +
+                " (assignment_type TEXT, day_value INT)");
 
+        // This method is for filling in the Notification Table only:
+        // fillDatabase();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + SEMESTER_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + EVENTS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + NOTIFICATION_TABLE);
     }
 
     // Called in AddSemesterFragment - inserts the courses and semester name into database
@@ -150,7 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Used in PrevSemesterFragment - This gets a list of all of the semesters that have been created:
     public ArrayList<String> getSemesterNames() {
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         db.beginTransaction();
         try {
@@ -159,7 +170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
                     String semName = cursor.getString(cursor.getColumnIndex(SEMESTER_NAME));
-                    list.add(semName);
+                    names.add(semName);
                 }
             }
             db.setTransactionSuccessful();
@@ -169,7 +180,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.endTransaction();
             db.close();
         }
-        return list;
+        return names;
     }
 
 
@@ -233,6 +244,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //  This method is called in the ViewAssignments class that displays all the dates from the database:
     public ArrayList<String> getEventDates() {
         ArrayList<String> dateList = new ArrayList<>();
+        ArrayList<String> dateListReversed = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         db.beginTransaction();
         try {
@@ -254,13 +266,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
             db.close();
+            dateListReversed = reverseArrayList(dateList);
         }
-        return dateList;
+        return dateListReversed;
     }
 
     //  This gets all of the courses that are inside the events table:
     public ArrayList<String> getEventClasses() {
         ArrayList<String> classList = new ArrayList<>();
+        ArrayList<String> classListReversed = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         db.beginTransaction();
         try {
@@ -282,13 +296,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
             db.close();
+            classListReversed = reverseArrayList(classList);
         }
-        return classList;
+        return classListReversed;
     }
 
     //  This method is also called in the sub2Activity and is used to get all of the assignment types from the database:
     public ArrayList<String> getEventAssignmentTypes() {
         ArrayList<String> assignmentList = new ArrayList<>();
+        ArrayList<String> assignmentListReversed = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         db.beginTransaction();
         try {
@@ -310,8 +326,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
             db.close();
+            assignmentListReversed = reverseArrayList(assignmentList);
         }
-        return assignmentList;
+        return assignmentListReversed;
     }
 
     //  This method is called in the PopUp class to display classes on a certain date:
@@ -373,36 +390,188 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<Events> collectEventsPerMonth(String month, String year)
-    {
-        ArrayList<Events> events = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        db.beginTransaction();
-        try {
-            String selectQuery = "SELECT * FROM " + EVENTS_TABLE + " WHERE " + DATE_OF_EVENT + " LIKE '%" + year + "." + month + "%'";
-            Cursor cursor = db.rawQuery(selectQuery, null);
-            if (cursor.getCount() > 0) {
-                while (cursor.moveToNext()) {
-                    for (int i = 0; i < db.getMaximumSize(); i++) {
-                        String course = cursor.getString(cursor.getColumnIndex(CLASS_OF_EVENT));
-                        String assignmentType = cursor.getString(cursor.getColumnIndex(ASSIGNMENT_TYPE));
-                        String date = cursor.getString(cursor.getColumnIndex(DATE_OF_EVENT));
-                        Events event = new Events(course, assignmentType, date);
-                        events.add(event);
-                        cursor.moveToNext();
-                    }
-                }
-                db.setTransactionSuccessful();
+    // Takes an arraylist as a parameter and returns
+    // a reversed arraylist
+    public ArrayList<String> reverseArrayList(ArrayList<String> alist) {
+        // Arraylist for storing reversed elements
+        ArrayList<String> revArrayList = new ArrayList<String>();
+        for (int i = alist.size() - 1; i >= 0; i--) {
 
-            }
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            db.endTransaction();
-            db.close();
+            // Append the elements in reverse order
+            revArrayList.add(alist.get(i));
         }
-        return events;
+
+        // Return the reversed arraylist
+        return revArrayList;
+    }
+
+
+
+    public void fillDatabase()
+    {
+        SQLiteDatabase dbw = this.getWritableDatabase();
+        SQLiteDatabase dbr = this.getReadableDatabase();
+
+
+        String query = "SELECT * FROM " + NOTIFICATION_TABLE;
+        String insertHomework = "INSERT INTO " + NOTIFICATION_TABLE + "(assignment_type) VALUES('homework')";
+        String insertQuiz = "INSERT INTO " + NOTIFICATION_TABLE + "(assignment_type) VALUES('quiz')";
+        String insertTest = "INSERT INTO " + NOTIFICATION_TABLE + "(assignment_type) VALUES('test')";
+        String insertExam = "INSERT INTO " + NOTIFICATION_TABLE + "(assignment_type) VALUES('exam')";
+        String insertPaper = "INSERT INTO " + NOTIFICATION_TABLE + "(assignment_type) VALUES('paper')";
+        String insertProject = "INSERT INTO " + NOTIFICATION_TABLE + "(assignment_type) VALUES('project')";
+        Cursor cursor = dbr.rawQuery(query, null);
+        cursor.moveToFirst();
+
+            dbw.execSQL(insertHomework);
+            dbw.execSQL(insertQuiz);
+            dbw.execSQL(insertTest);
+            dbw.execSQL(insertExam);
+            dbw.execSQL(insertPaper);
+            dbw.execSQL(insertProject);
+
+
+    }
+
+    public int getHomeworkValue()
+    {
+        int homework = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + NOTIFICATION_TABLE + " WHERE " + ASSIGNMENT_TYPE_NAME + " = '%homework%'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while(cursor.moveToNext())
+            {
+                homework = cursor.getInt(cursor.getColumnIndex(DAY_VALUE));
+            }
+        }
+        return homework;
+    }
+
+    public int getQuizValue()
+    {
+        int quiz = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + NOTIFICATION_TABLE + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'quiz'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while(cursor.moveToNext())
+            {
+                quiz = cursor.getInt(cursor.getColumnIndex(DAY_VALUE));
+            }
+        }
+        return quiz;
+    }
+
+    public int getTestValue()
+    {
+        int test = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + NOTIFICATION_TABLE + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'test'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while(cursor.moveToNext())
+            {
+                test = cursor.getInt(cursor.getColumnIndex(DAY_VALUE));
+            }
+        }
+        return test;
+    }
+
+    public int getExamValue()
+    {
+        int exam = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + NOTIFICATION_TABLE + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'exam'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while(cursor.moveToNext())
+            {
+                exam = cursor.getInt(cursor.getColumnIndex(DAY_VALUE));
+            }
+        }
+        return exam;
+    }
+
+    public int getPaperValue()
+    {
+        int paper= 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + NOTIFICATION_TABLE + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'paper'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while(cursor.moveToNext())
+            {
+                paper = cursor.getInt(cursor.getColumnIndex(DAY_VALUE));
+            }
+        }
+        return paper;
+    }
+
+    public int getProjectValue()
+    {
+        int project = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + NOTIFICATION_TABLE + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'project'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while(cursor.moveToNext())
+            {
+                project = cursor.getInt(cursor.getColumnIndex(DAY_VALUE));
+            }
+        }
+        return project;
+    }
+//  Methods to set the notification days:
+    public void updateHomeworkValue(int value)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE notification_table SET day_value = " + value + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'homework'");
+    }
+
+    public void updateQuizValue(int value)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE notification_table SET day_value = " + value + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'quiz'");
+    }
+
+    public void updateTestValue(int value)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE notification_table SET day_value = " + value + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'test'");
+    }
+
+    public void updateExamValue(int value)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE notification_table SET day_value = " + value + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'exam'");
+    }
+
+    public void updatePaperValue(int value)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE notification_table SET day_value = " + value + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'paper'");
+    }
+
+    public void updateProjectValue(int value)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE notification_table SET day_value = " + value + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'project'");
+    }
+
+    public void isTableCreated()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + NOTIFICATION_TABLE + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'homework'";
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToNext() == false)
+        {
+            fillDatabase();
+        }
+        else
+        {
+            return;
+        }
     }
 
 }

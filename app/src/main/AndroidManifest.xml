@@ -12,7 +12,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:node="replace">
-        <activity android:name=".CalendarTest"></activity>
         <activity
             android:name=".sub2Activity"
             android:label="Create a New Activity"

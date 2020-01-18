@@ -28,14 +28,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
  ************************************************************************************/
 public class NotificationSettingsFragment extends Fragment {
 
-    // These are to be used in the methods to have a color to start with:
-    int DefaultHomeworkColor;
-    int DefaultQuizColor;
-    int DefaultTestColor;
-    int DefaultExamColor;
-    int DefaultPaperColor;
-    int DefaultProjectColor;
-
+    DatabaseHelper db;
     //  These are the spinners used on the settings screen:
     Spinner sHomework;
     Spinner sQuiz;
@@ -44,14 +37,6 @@ public class NotificationSettingsFragment extends Fragment {
     Spinner sPaper;
     Spinner sProject;
 
-    // These are the buttons that the user can use to change the color of assignment types:
-    Button btnHomeworkColor;
-    Button btnQuizColor;
-    Button btnTestColor;
-    Button btnExamColor;
-    Button btnPaperColor;
-    Button btnProjectColor;
-
     // These are the values that will be used in the sub2Activity class:
     public static Long setHomeworkTime;
     public static Long setQuizTime;
@@ -59,14 +44,6 @@ public class NotificationSettingsFragment extends Fragment {
     public static Long setExamTime;
     public static Long setPaperTime;
     public static Long setProjectTime;
-
-    // These are the colors that will be used on the calendar:
-    public static Integer setHomeworkColor;
-    public static Integer setQuizColor;
-    public static Integer setTestColor;
-    public static Integer setExamColor;
-    public static Integer setPaperColor;
-    public static Integer setProjectColor;
 
     //  Use these values if the user has not selected a set number of days ahead;
     public Long oneDayMil = longValue(8.64 * Math.pow(10, 7));         // default homework
@@ -79,13 +56,10 @@ public class NotificationSettingsFragment extends Fragment {
     public View onCreateView( LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_notification_settings, container, false);
 
-        // Setting default colors:
-        DefaultHomeworkColor = ContextCompat.getColor(getActivity(), R.color.homeworkColor);
-        DefaultQuizColor     = ContextCompat.getColor(getActivity(), R.color.quizColor);
-        DefaultTestColor     = ContextCompat.getColor(getActivity(), R.color.testColor);
-        DefaultExamColor     = ContextCompat.getColor(getActivity(), R.color.examColor);
-        DefaultPaperColor    = ContextCompat.getColor(getActivity(), R.color.paperColor);
-        DefaultProjectColor  = ContextCompat.getColor(getActivity(), R.color.projectColor);
+        // Initializing database:
+        db = DatabaseHelper.getInstance(getActivity());
+
+        db.isTableCreated();
 
         // Initializing our spinners:
         sHomework = v.findViewById(R.id.spinnerHomework);
@@ -94,14 +68,6 @@ public class NotificationSettingsFragment extends Fragment {
         sExam     = v.findViewById(R.id.spinnerExam);
         sPaper    = v.findViewById(R.id.spinnerPaper);
         sProject  = v.findViewById(R.id.spinnerProject);
-
-        // Initializing our buttons for changing colors:
-        btnHomeworkColor = v.findViewById(R.id.btnHomeworkColor);       // default homework color
-        btnQuizColor     = v.findViewById(R.id.btnQuizColor);           // default quiz color
-        btnTestColor     = v.findViewById(R.id.btnTestColor);           // default test color
-        btnExamColor     = v.findViewById(R.id.btnExamColor);           // default exam color
-        btnPaperColor    = v.findViewById(R.id.btnPaperColor);          // default paper color
-        btnProjectColor  = v.findViewById(R.id.btnProjectColor);        // default project color
 
 
         // displaying possible values for the number of days before the assignment is due:
@@ -137,12 +103,13 @@ public class NotificationSettingsFragment extends Fragment {
 
 
         //  Now we need to save their settings using an onItemSelectedListener:
-        sHomework.setSelection(0);      // Doing this sets the spinners to my "default" value.
+        sHomework.setSelection(findIndex(sHomeworkDays, db.getHomeworkValue()));  // Doing this sets the spinners to my "default" value.
         sHomework.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int selectedHomeworkTime = (sHomework.getSelectedItemPosition() + 1);
-                setHomeworkTime = getDayToMillisecond(selectedHomeworkTime);
+                int selectedHomeworkTime = (sHomework.getSelectedItemPosition() + 1); //  This saves the value the user chose.
+                setHomeworkTime = getDayToMillisecond(selectedHomeworkTime);          //  This converts that time to milliseconds
+                db.updateHomeworkValue(selectedHomeworkTime);                         //  This is where the database is called to update the value.
             }
 
             @Override
@@ -151,12 +118,13 @@ public class NotificationSettingsFragment extends Fragment {
             }
         });
 
-        sQuiz.setSelection(4);
+        sQuiz.setSelection(findIndex(sQuizDays,db.getQuizValue()));
         sQuiz.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int selectedQuizTime = (sQuiz.getSelectedItemPosition() + 1);
                 setQuizTime = getDayToMillisecond(selectedQuizTime);
+                db.updateQuizValue(selectedQuizTime);
             }
 
             @Override
@@ -165,12 +133,14 @@ public class NotificationSettingsFragment extends Fragment {
             }
         });
 
-        sTest.setSelection(8);
+        sTest.setSelection(findIndex(sTestDays,db.getTestValue()));
         sTest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int selectedTestTime = (sTest.getSelectedItemPosition() + 1);
                 setTestTime = getDayToMillisecond(selectedTestTime);
+                db.updateTestValue(selectedTestTime);
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -178,12 +148,13 @@ public class NotificationSettingsFragment extends Fragment {
             }
         });
 
-        sExam.setSelection(11);
+        sExam.setSelection(findIndex(sExamDays, db.getExamValue()));
         sExam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int selectedExamTime = (sExam.getSelectedItemPosition() + 1);
                 setExamTime = getDayToMillisecond(selectedExamTime);
+                db.updateExamValue(selectedExamTime);
             }
 
             @Override
@@ -192,12 +163,13 @@ public class NotificationSettingsFragment extends Fragment {
             }
         });
 
-        sPaper.setSelection(11);
+        sPaper.setSelection(findIndex(sPaperDays,db.getPaperValue()));
         sPaper.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int selectedPaperTime = (sPaper.getSelectedItemPosition() + 1);
                 setPaperTime = getDayToMillisecond(selectedPaperTime);
+                db.updatePaperValue(selectedPaperTime);
             }
 
             @Override
@@ -206,61 +178,18 @@ public class NotificationSettingsFragment extends Fragment {
             }
         });
 
-        sProject.setSelection(11);
+        sProject.setSelection(findIndex(sProjectDays,db.getProjectValue()));
         sProject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int selectedProjectTime = (sProject.getSelectedItemPosition() + 1);
                 setProjectTime = getDayToMillisecond(selectedProjectTime);
+                db.updateProjectValue(selectedProjectTime);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 setProjectTime = twelveDaysMil;
-            }
-        });
-
-        //  The following methods are used to display the color picker so the user can choose what color they want the
-        //  assignments to be:
-        btnHomeworkColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openHomeworkColorPicker(false);
-            }
-        });
-
-        btnQuizColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openQuizColorPicker(false);
-            }
-        });
-
-        btnTestColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openTestColorPicker(false);
-            }
-        });
-
-        btnExamColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openExamColorPicker(false);
-            }
-        });
-
-        btnPaperColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openPaperColorPicker(false);
-            }
-        });
-
-        btnProjectColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openProjectColorPicker(false);
             }
         });
 
@@ -365,142 +294,31 @@ public class NotificationSettingsFragment extends Fragment {
         return (long)value;
     }
 
-    // The next few methods are called in other classes to get whatever values the user chose or the default:
-    public long getHomeworkTime()
+    // Linear-search function to find the index of an element
+    public static int findIndex(Integer arr[], int t)
     {
-        return setHomeworkTime;
-    }
 
-    public long getQuizTime()
-    {
-        return setQuizTime;
-    }
+        // if array is Null
+        if (arr == null) {
+            return -1;
+        }
 
-    public long getTestTime()
-    {
-        return setTestTime;
-    }
+        // find length of array
+        int len = arr.length;
+        int i = 0;
 
-    public long getExamTime()
-    {
-        return setExamTime;
-    }
+        // traverse in the array
+        while (i < len) {
 
-    public long getPaperTime()
-    {
-        return setPaperTime;
-    }
-
-    public long getProjectTime()
-    {
-        return setProjectTime;
-    }
-
-    //  The next few methods pretty much just open the color picker and changes the set color to whatever the user chooses:
-    private void openHomeworkColorPicker(boolean alphaSupport)
-    {
-        AmbilWarnaDialog AWD = new AmbilWarnaDialog(getActivity(), DefaultHomeworkColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                Toast.makeText(getActivity(), "Color Picker Closed", Toast.LENGTH_SHORT).show();
+            // if the i-th element is t
+            // then return the index
+            if (arr[i] == t) {
+                return i;
             }
-
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                DefaultHomeworkColor = color;
-                btnHomeworkColor.setBackgroundColor(color);
-                setHomeworkColor = color;
+            else {
+                i = i + 1;
             }
-        });
-        AWD.show();
-    }
-
-    private void openQuizColorPicker(boolean alphaSupport)
-    {
-        AmbilWarnaDialog AWD = new AmbilWarnaDialog(getActivity(), DefaultQuizColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-            }
-
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                DefaultQuizColor = color;
-                btnQuizColor.setBackgroundColor(color);
-                setQuizColor = color;
-            }
-        });
-        AWD.show();
-    }
-
-    private void openTestColorPicker(boolean alphaSupport)
-    {
-        AmbilWarnaDialog AWD = new AmbilWarnaDialog(getActivity(), DefaultTestColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                Toast.makeText(getActivity(), "Color Picker Closed", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                DefaultTestColor = color;
-                btnTestColor.setBackgroundColor(color);
-                setTestColor = color;
-            }
-        });
-        AWD.show();
-    }
-
-    private void openExamColorPicker(boolean alphaSupport)
-    {
-        AmbilWarnaDialog AWD = new AmbilWarnaDialog(getActivity(), DefaultExamColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                Toast.makeText(getActivity(), "Color Picker Closed", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                DefaultExamColor = color;
-                btnExamColor.setBackgroundColor(color);
-                setExamColor = color;
-            }
-        });
-        AWD.show();
-    }
-
-    private void openPaperColorPicker(boolean alphaSupport)
-    {
-        AmbilWarnaDialog AWD = new AmbilWarnaDialog(getActivity(), DefaultPaperColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                Toast.makeText(getActivity(), "Color Picker Closed", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                DefaultPaperColor = color;
-                btnPaperColor.setBackgroundColor(color);
-                setPaperColor = color;
-            }
-        });
-        AWD.show();
-    }
-
-    private void openProjectColorPicker(boolean alphaSupport)
-    {
-        AmbilWarnaDialog AWD = new AmbilWarnaDialog(getActivity(), DefaultProjectColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                Toast.makeText(getActivity(), "Color Picker Closed", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                DefaultProjectColor = color;
-                btnProjectColor.setBackgroundColor(color);
-                setProjectColor = color;
-            }
-        });
-        AWD.show();
+        }
+        return -1;
     }
 }

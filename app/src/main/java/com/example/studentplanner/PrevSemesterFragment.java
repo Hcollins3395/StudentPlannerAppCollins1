@@ -55,6 +55,7 @@ public class PrevSemesterFragment extends Fragment {
         ArrayList<String> listSemesters = myDB.getSemesterNames();
         ArrayAdapter<String> semesterAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, listSemesters);
         spinners_semesters.setAdapter(semesterAdapter);
+        spinners_semesters.setSelection(listSemesters.size() - 1);
 
 
         // Set spinner to button method:

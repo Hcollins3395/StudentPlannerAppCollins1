@@ -21,26 +21,30 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="left"
                 android:paddingRight="10dp"
                 android:text="Date"
-                android:textSize="22dp" />
+                android:textSize="22dp"
+                android:textAlignment="center"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="left"
                 android:paddingRight="10dp"
                 android:text="Class"
-                android:textSize="22dp" />
+                android:textSize="22dp"
+                android:textAlignment="center"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="157dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="Assignment Type"
-                android:textSize="22dp" />
+                android:textSize="22dp"
+                android:textAlignment="center"/>
         </TableRow>
+
 
         <TableRow
             android:id="@+id/columnInformation"
@@ -54,7 +58,8 @@
                 android:layout_width="wrap_content"
                 android:paddingRight="10dp"
                 android:textSize="17dp"
-                android:text="dates"/>
+                android:text="dates"
+                android:gravity="left"/>
 
             <TextView
                 android:id="@+id/classInformation"
@@ -62,7 +67,8 @@
                 android:layout_width="wrap_content"
                 android:paddingRight="10dp"
                 android:textSize="17dp"
-                android:text="classes"/>
+                android:text="classes"
+                android:gravity="left"/>
 
             <TextView
                 android:id="@+id/assignmentInformation"
@@ -70,12 +76,17 @@
                 android:layout_width="wrap_content"
                 android:paddingRight="10dp"
                 android:textSize="17dp"
-                android:text="assignments"/>
+                android:text="assignments"
+                android:gravity="left"/>
 
 
         </TableRow>
 
-    </TableLayout>
+
+    </TableLayout >
+
+
+
 
     <Button
         android:id="@+id/backButton"

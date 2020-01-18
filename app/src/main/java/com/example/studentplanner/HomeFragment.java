@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
@@ -23,21 +24,18 @@ import androidx.fragment.app.Fragment;
  *****************************************************************************/
 public class HomeFragment extends Fragment {
 Button btnDisplayEvents;
-String dateSelected;
-CustomCalendarView customCalendarView;
-
+String dateSelected = " ";
+CalendarView calendarView;
+TextView tv_welcome;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        customCalendarView = (CustomCalendarView)view.findViewById(R.id.custom_calendar_view);
-        Button btn_add_event = view.findViewById(R.id.btn_add_event);
-
-
+        calendarView = view.findViewById(R.id.calendar_view);
+        tv_welcome = view.findViewById(R.id.tv_welcome);
 
         // When a value on the calendar is clicked, this method is called:
-        /*
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
@@ -46,23 +44,8 @@ CustomCalendarView customCalendarView;
                 Intent intent = new Intent(getActivity(), PopUp.class);
                 intent.putExtra("date", dateSelected);
                 startActivity(intent);
-            }                                                               // on the date selected.
-        });
-
-
-         */
-        //  button passes info to the sub2Activity class and displays that class as well
-        btn_add_event.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in  = new Intent(getActivity(), sub2Activity.class);
-                in.putExtra("date", dateSelected);
-
-
-                startActivity(in);
             }
         });
-
 
 
         // This displays the ViewAssignments class:

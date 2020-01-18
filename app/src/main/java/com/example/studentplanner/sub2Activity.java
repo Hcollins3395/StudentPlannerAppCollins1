@@ -47,7 +47,6 @@ public class sub2Activity extends AppCompatActivity  {
 
     private NotificationCompat.Builder notification;
     DatabaseHelper db;
-    NotificationSettingsFragment NSF;
     private Handler handler = new Handler();
 
     public String selectedAssignmentType;
@@ -62,7 +61,6 @@ public class sub2Activity extends AppCompatActivity  {
     Long cDateTIM;
 
     Button btn_create_event;
-    TextView current_classes;
     TextView tv_date;
     Calendar cDate;
 
@@ -93,9 +91,6 @@ public class sub2Activity extends AppCompatActivity  {
         cDateTIM = cDate.getTimeInMillis(); // Getting the date and converting it to milliseconds
                                             // this is to help compare to the number of days we need to
                                             // subtract for the notification delay.
-        current_classes = findViewById(R.id.currentSemesterName);
-        currentSemester = db.getCurrentSemesterName().toString();
-        current_classes.setText(currentSemester);
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -174,17 +169,17 @@ public class sub2Activity extends AppCompatActivity  {
 
                 notification.setContentIntent(pendingIntent);
                 if(selectedAssignmentType == "Homework Assignment")
-                    handler.postDelayed(runnable, (cDateTIM - NSF.getHomeworkTime()));
+                    handler.postDelayed(runnable, (cDateTIM - db.getHomeworkValue()));
                 else if(selectedAssignmentType == "Quiz")
-                    handler.postDelayed(runnable, (cDateTIM - NSF.getQuizTime()));
+                    handler.postDelayed(runnable, (cDateTIM - db.getQuizValue()));
                 else if(selectedAssignmentType == "Test")
-                    handler.postDelayed(runnable, (cDateTIM - NSF.getTestTime()));
+                    handler.postDelayed(runnable, (cDateTIM - db.getTestValue()));
                 else if(selectedAssignmentType == "Exam")
-                    handler.postDelayed(runnable, (cDateTIM - NSF.getExamTime()));
+                    handler.postDelayed(runnable, (cDateTIM - db.getExamValue()));
                 else if(selectedAssignmentType == "Project")
-                    handler.postDelayed(runnable, (cDateTIM - NSF.getProjectTime()));
+                    handler.postDelayed(runnable, (cDateTIM - db.getProjectValue()));
                 else if(selectedAssignmentType == "Paper")
-                    handler.postDelayed(runnable, (cDateTIM - NSF.getPaperTime()));
+                    handler.postDelayed(runnable, (cDateTIM - db.getPaperValue()));
             }
             private Runnable runnable = new Runnable() {
                 @Override
