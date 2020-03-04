@@ -2,11 +2,210 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+
     <TextView
+        android:id="@+id/settingsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notification Settings Fragmentt"
-        android:textSize="30sp"
-        android:gravity="center"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginEnd="72dp"
+        android:layout_marginRight="72dp"
+        android:gravity="center"
+        android:text="Notification Settings"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/settingInstructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="For each of the following, choose the amount of days before due date to be notified:"
+        android:layout_below="@+id/settingsTitle"
+        android:padding="12dp"/>
+
+
+    <TextView
+        android:id="@+id/tvNSHomework"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settingInstructions"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:padding="10dp"
+        android:text="Homework: " />
+
+    <Spinner
+        android:id="@+id/spinnerHomework"
+        android:layout_width="73dp"
+        android:layout_height="46dp"
+        android:layout_alignTop="@+id/tvNSHomework"
+        android:layout_alignBottom="@+id/tvNSHomework"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="62dp"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/tvNSHomework"
+        android:layout_toRightOf="@+id/tvNSHomework"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/tvNSQuiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNSHomework"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:padding="10dp"
+        android:text="Quiz: " />
+
+    <Spinner
+        android:id="@+id/spinnerQuiz"
+        android:layout_width="73dp"
+        android:layout_height="46dp"
+        android:layout_above="@+id/tvNSTest"
+        android:layout_alignTop="@+id/tvNSQuiz"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/tvNSQuiz"
+        android:layout_toRightOf="@+id/tvNSQuiz"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/tvNSTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNSQuiz"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:padding="10dp"
+        android:text="Test: " />
+
+    <Spinner
+        android:id="@+id/spinnerTest"
+        android:layout_width="73dp"
+        android:layout_height="46dp"
+        android:layout_above="@+id/tvNSExam"
+        android:layout_below="@+id/tvNSQuiz"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="103dp"
+        android:layout_marginLeft="103dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="1dp"
+        android:layout_toEndOf="@+id/tvNSTest"
+        android:layout_toRightOf="@+id/tvNSTest"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/tvNSExam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNSTest"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:padding="10dp"
+        android:text="Exam: " />
+
+    <Spinner
+        android:id="@+id/spinnerExam"
+        android:layout_width="73dp"
+        android:layout_height="46dp"
+        android:layout_above="@+id/tvNSPaper"
+        android:layout_below="@+id/tvNSTest"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="96dp"
+        android:layout_marginLeft="96dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toEndOf="@+id/tvNSExam"
+        android:layout_toRightOf="@+id/tvNSExam"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/tvNSPaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNSExam"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:padding="10dp"
+        android:text="Paper: " />
+
+    <Spinner
+        android:id="@+id/spinnerPaper"
+        android:layout_width="73dp"
+        android:layout_height="46dp"
+        android:layout_above="@+id/tvNSProject"
+        android:layout_below="@+id/tvNSExam"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="94dp"
+        android:layout_marginLeft="94dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="4dp"
+        android:layout_toEndOf="@+id/tvNSPaper"
+        android:layout_toRightOf="@+id/tvNSPaper"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/tvNSProject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNSPaper"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:padding="10dp"
+        android:text="Project: " />
+
+    <Spinner
+        android:id="@+id/spinnerProject"
+        android:layout_width="73dp"
+        android:layout_height="46dp"
+        android:layout_below="@+id/tvNSPaper"
+        android:layout_alignBottom="@+id/tvNSProject"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="86dp"
+        android:layout_marginLeft="86dp"
+        android:layout_marginTop="-1dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@+id/tvNSProject"
+        android:layout_toRightOf="@+id/tvNSProject"
+        android:padding="10dp" />
 
 </RelativeLayout>

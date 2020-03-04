@@ -23,12 +23,50 @@
         android:padding="20dp" />
 
     <TextView
-        android:id="@+id/tv_display_classes"
+        android:id="@+id/tvClass1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:lines="5"
-        android:text="This is where the class one should display"
+        android:text=" "
         android:layout_below="@+id/spinners_semesters"
+        android:textSize="20dp"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/tvClass2"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:layout_below="@+id/tvClass1"
         android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/tvClass3"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:layout_below="@+id/tvClass2"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/tvClass4"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:layout_below="@+id/tvClass3"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/tvClass5"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:layout_below="@+id/tvClass4"
+        android:textSize="20dp"/>
+
+
 
 </RelativeLayout>

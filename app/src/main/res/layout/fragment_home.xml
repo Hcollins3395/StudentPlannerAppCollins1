@@ -4,34 +4,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <TextView
         android:id="@+id/tv_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="140dp"
-        android:layout_marginTop="48dp"
-        android:text="Welcome!"
-        android:textAlignment="center"
-        android:textSize="30sp" />
+        android:text="Welcome"
+        android:layout_gravity="center"
+        android:textSize="32dp" />
 
-    <LinearLayout
-        android:padding="20dp"
-        android:layout_width="300dp"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp">
+        android:id="@+id/homepage_instructions"
+        android:text="Please choose a date to get started:"
+        android:textSize="20dp"/>
 
-        <CalendarView
-            android:id="@+id/calendar"
-            android:layout_width="wrap_content"
-            android:layout_height="306dp" />
-    </LinearLayout>
+    <CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <Button
-        android:layout_marginLeft="80dp"
-        android:id="@+id/btn_add_event"
+        android:id="@+id/btn_display_events"
         android:layout_width="231dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:padding="20dp"
-        android:text="Add New Assignment" />
+        android:text="View Assignments" />
 
 </LinearLayout>

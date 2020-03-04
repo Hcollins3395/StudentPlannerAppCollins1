@@ -2,25 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.studentplanner">
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher_main"
+        android:label="Student Planner"
+        android:roundIcon="@mipmap/ic_launcher_main"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:node="replace">
 
-        <activity
-            android:name=".sub2Activity"
-            android:label="@string/title_activity_sub2"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.studentplanner.MainActivity" />
-        </activity>
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -30,6 +22,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".StartUpWindow"
+            android:theme="@style/AppTheme.CustomPopupWindow">
+        </activity>
+        <activity
+            android:name=".sub2Activity"
+            android:label="Create a New Activity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.studentplanner.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ViewAssignments"
+            android:label="View Assignments"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PopUp"
+            android:theme="@style/AppTheme.CustomPopupWindow"></activity>
+
     </application>
 
 </manifest>

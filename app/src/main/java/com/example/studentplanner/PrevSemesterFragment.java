@@ -1,34 +1,36 @@
 package com.example.studentplanner;
 
 import android.annotation.SuppressLint;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-import static com.example.studentplanner.DatabaseHelper.CLASS_ONE;
+/****************************************************************************************
+                                 ***  Previous Semesters ***
+ * This class displays the classes of whatever semester the user chooses from a
+ * spinner.
+ *
+ * There is a spinner that calls the database class to get all of the semester
+ * names and, depending on what is chosen, the courses are then displayed in a
+ * TextView.
+ ****************************************************************************************/
 
 public class PrevSemesterFragment extends Fragment {
     DatabaseHelper myDB;
+    TextView tvClass1;
+    TextView tvClass2;
+    TextView tvClass3;
+    TextView tvClass4;
+    TextView tvClass5;
 
     @SuppressLint("ResourceType")
     @Nullable
@@ -39,8 +41,11 @@ public class PrevSemesterFragment extends Fragment {
         myDB = DatabaseHelper.getInstance(getActivity());
         final DatabaseHelper myDB = new DatabaseHelper(getActivity());
 
-        // TextView to display classes:
-        final TextView tv_display_classes = v.findViewById(R.id.tv_display_classes);
+        tvClass1 = v.findViewById(R.id.tvClass1);
+        tvClass2 = v.findViewById(R.id.tvClass2);
+        tvClass3 = v.findViewById(R.id.tvClass3);
+        tvClass4 = v.findViewById(R.id.tvClass4);
+        tvClass5 = v.findViewById(R.id.tvClass5);
 
         // Initializing the Spinner
         final Spinner spinners_semesters = v.findViewById(R.id.spinners_semesters);
@@ -50,13 +55,18 @@ public class PrevSemesterFragment extends Fragment {
         ArrayList<String> listSemesters = myDB.getSemesterNames();
         ArrayAdapter<String> semesterAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, listSemesters);
         spinners_semesters.setAdapter(semesterAdapter);
+        spinners_semesters.setSelection(listSemesters.size() - 1);
 
 
         // Set spinner to button method:
         spinners_semesters.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                tv_display_classes.setText(myDB.getSemesterClasses(position).toString());
+                tvClass1.setText(myDB.getSemesterClasses(position).get(0));
+                tvClass2.setText(myDB.getSemesterClasses(position).get(1));
+                tvClass3.setText(myDB.getSemesterClasses(position).get(2));
+                tvClass4.setText(myDB.getSemesterClasses(position).get(3));
+                tvClass5.setText(myDB.getSemesterClasses(position).get(4));
             }
 
             @Override
@@ -64,6 +74,8 @@ public class PrevSemesterFragment extends Fragment {
 
             }
         });
+
+
 
 
         return v;
