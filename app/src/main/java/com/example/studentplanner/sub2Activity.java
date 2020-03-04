@@ -19,11 +19,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
 
 /***************************************************************************************
                              *** Create an Event ***
@@ -49,6 +55,7 @@ public class sub2Activity extends AppCompatActivity  {
     DatabaseHelper db;
     private Handler handler = new Handler();
 
+    // Strings in this class:
     public String selectedAssignmentType;
     public String selectedClass;
     public static final String PRIMARY_CHANNEL_ID = "Primary Notifications Channel";
@@ -56,14 +63,34 @@ public class sub2Activity extends AppCompatActivity  {
     String selectedDatePlusTime;
     String currentSemester;
 
-    public static final int uniqueID = 12345;
+    // ID for notifications:
+    public static final int uniqueID = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 
-    Long cDateTIM;
+    // Used to help calculate values
+    Date date;
+    Date currentDate;
+    Long sDateTIM;
+    Long subCDAndSD;
+
+    // values from database
+    Long currentDateInMilliseconds;
+    Long homeworkValueInMilliseconds;
+    Long quizValueInMilliseconds;
+    Long testValueInMilliseconds;
+    Long examValueInMilliseconds;
+    Long paperValueInMilliseconds;
+    Long projectValueInMilliseconds;
+
+    // Final calculated values:
+    Long finalHomeworkInMilliseconds;
+    Long finalQuizInMilliseconds;
+    Long finalTestInMilliseconds;
+    Long finalExamInMilliseconds;
+    Long finalPaperInMilliseconds;
+    Long finalProjectValueInMilliseconds;
 
     Button btn_create_event;
     TextView tv_date;
-    Calendar cDate;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,23 +102,42 @@ public class sub2Activity extends AppCompatActivity  {
 
         tv_date = findViewById(R.id.calendar_date);
 
+
         // Getting value from the home fragment
         Intent incomingIntent = getIntent();
         selectedDate = incomingIntent.getStringExtra("date");
         tv_date.setText(selectedDate);
-        selectedDatePlusTime = selectedDate + " at 07:00:00";
+        selectedDatePlusTime = selectedDate + " 07:00:00";
 
-        cDate = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z", Locale.ENGLISH);
+        // sDateTIM = date.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         try {
-            cDate.setTime(sdf.parse(selectedDatePlusTime));
+            date = sdf.parse(selectedDatePlusTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        cDateTIM = cDate.getTimeInMillis(); // Getting the date and converting it to milliseconds
-                                            // this is to help compare to the number of days we need to
-                                            // subtract for the notification delay.
 
+        sDateTIM = date.getTime();
+
+        currentDate = new Date();
+        currentDateInMilliseconds = currentDate.getTime();
+        subCDAndSD = sDateTIM - currentDateInMilliseconds;
+
+        // Calculating assignment type values
+        homeworkValueInMilliseconds = new Long(db.getHomeworkValue() * 86400000);
+        quizValueInMilliseconds     = new Long(db.getQuizValue() * 86400000);
+        testValueInMilliseconds     = new Long(db.getTestValue() * 86400000);
+        examValueInMilliseconds     = new Long(db.getExamValue() * 86400000);
+        paperValueInMilliseconds     = new Long(db.getPaperValue() * 86400000);
+        projectValueInMilliseconds  = new Long(db.getProjectValue() * 86400000);
+
+        // Calculating final values:
+        final Long finalHomeworkInMilliseconds     = subCDAndSD - homeworkValueInMilliseconds;
+        final Long finalQuizInMilliseconds         = subCDAndSD - quizValueInMilliseconds;
+        final Long finalTestInMilliseconds         = subCDAndSD - testValueInMilliseconds;
+        final Long finalExamInMilliseconds         = subCDAndSD - examValueInMilliseconds;
+        final Long finalPaperInMilliseconds        = subCDAndSD - paperValueInMilliseconds;
+        final Long finalProjectValueInMilliseconds = subCDAndSD - projectValueInMilliseconds;
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +196,7 @@ public class sub2Activity extends AppCompatActivity  {
         btn_create_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 notification = new NotificationCompat.Builder(sub2Activity.this, PRIMARY_CHANNEL_ID);
                 notification.setSmallIcon(R.drawable.ic_notification);
                 notification.setWhen(System.currentTimeMillis());
@@ -169,17 +216,18 @@ public class sub2Activity extends AppCompatActivity  {
 
                 notification.setContentIntent(pendingIntent);
                 if(selectedAssignmentType == "Homework Assignment")
-                    handler.postDelayed(runnable, (cDateTIM - db.getHomeworkValue()));
+                    handler.postDelayed(runnable, finalHomeworkInMilliseconds);
                 else if(selectedAssignmentType == "Quiz")
-                    handler.postDelayed(runnable, (cDateTIM - db.getQuizValue()));
+                    handler.postDelayed(runnable, finalQuizInMilliseconds);
                 else if(selectedAssignmentType == "Test")
-                    handler.postDelayed(runnable, (cDateTIM - db.getTestValue()));
+                    handler.postDelayed(runnable, finalTestInMilliseconds);
                 else if(selectedAssignmentType == "Exam")
-                    handler.postDelayed(runnable, (cDateTIM - db.getExamValue()));
+                    handler.postDelayed(runnable, finalExamInMilliseconds);
                 else if(selectedAssignmentType == "Project")
-                    handler.postDelayed(runnable, (cDateTIM - db.getProjectValue()));
+                    handler.postDelayed(runnable, finalPaperInMilliseconds);
                 else if(selectedAssignmentType == "Paper")
-                    handler.postDelayed(runnable, (cDateTIM - db.getPaperValue()));
+                    handler.postDelayed(runnable, finalProjectValueInMilliseconds);
+
             }
             private Runnable runnable = new Runnable() {
                 @Override

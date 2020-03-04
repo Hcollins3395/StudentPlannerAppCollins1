@@ -46,7 +46,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:text="Choose a class:"
+        android:text="Choose a course:"
         android:textSize="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendar_date" />
@@ -97,6 +97,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_choose_assignment"
         app:layout_constraintVertical_bias="0.189" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:paddingRight="10dp"
-                android:text="Class"
+                android:text="Courses"
                 android:textSize="22dp"
                 android:textAlignment="center"/>
 

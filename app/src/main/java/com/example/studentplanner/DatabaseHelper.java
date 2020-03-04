@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -437,7 +437,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         int homework = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + NOTIFICATION_TABLE + " WHERE " + ASSIGNMENT_TYPE_NAME + " = '%homework%'";
+        String query = "SELECT * FROM " + NOTIFICATION_TABLE + " WHERE " + ASSIGNMENT_TYPE_NAME + " = 'homework'";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
             while(cursor.moveToNext())
@@ -445,6 +445,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 homework = cursor.getInt(cursor.getColumnIndex(DAY_VALUE));
             }
         }
+
         return homework;
     }
 
@@ -574,4 +575,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean isDBEmpty() {
+
+        boolean isEmpty;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + SEMESTER_TABLE;
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToNext() == false)
+        {
+            isEmpty = true;
+        }
+        else
+        {
+            isEmpty = false;
+        }
+        return isEmpty;
+    }
 }

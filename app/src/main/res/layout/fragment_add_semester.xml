@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:ems="10"
-        android:hint="First Class"
+        android:hint="First Course"
         android:inputType="textPersonName"
         android:textSize="24sp" />
 
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:ems="10"
-        android:hint="Second Class"
+        android:hint="Second Course"
         android:inputType="textPersonName"
         android:textSize="24sp" />
 
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:ems="10"
-        android:hint="Third Class"
+        android:hint="Third Course"
         android:inputType="textPersonName"
         android:textSize="24sp" />
 
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:ems="10"
-        android:hint="Fourth Class"
+        android:hint="Fourth Course"
         android:inputType="textPersonName"
         android:textSize="24sp" />
 
@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:ems="10"
-        android:hint="Fifth Class"
+        android:hint="Fifth Course"
         android:inputType="textPersonName"
         android:textSize="24sp" />
 
